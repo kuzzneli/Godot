@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://xnmw43hkwqqd"]
+
+[ext_resource type="Script" path="res://scripts/bottom_obstacle.gd" id="1_1mwe1"]
+[ext_resource type="Texture2D" uid="uid://bsvs5einr4k5k" path="res://flappy-bird-assets-master/sprites/pipe-green.png" id="1_uaswu"]
+[ext_resource type="PackedScene" uid="uid://c7uson1rp1pr2" path="res://scenes/killzone.tscn" id="3_bjd8j"]
+[ext_resource type="Script" path="res://scripts/checkpoint.gd" id="4_laa4h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7v15v"]
+size = Vector2(52, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85m2m"]
+size = Vector2(4, 90)
+
+[node name="Obstacles" type="Area2D"]
+z_index = 4
+script = ExtResource("1_1mwe1")
+
+[node name="Bottom" type="Node2D" parent="."]
+position = Vector2(1, 198)
+
+[node name="Sprite2D" type="Sprite2D" parent="Bottom"]
+texture = ExtResource("1_uaswu")
+
+[node name="Killzone" parent="Bottom" instance=ExtResource("3_bjd8j")]
+position = Vector2(-1, -198)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bottom/Killzone"]
+position = Vector2(1, 198)
+shape = SubResource("RectangleShape2D_7v15v")
+
+[node name="Top" type="Node2D" parent="."]
+position = Vector2(-3.8147e-06, -214)
+rotation = 3.14257
+
+[node name="Sprite2D" type="Sprite2D" parent="Top"]
+texture = ExtResource("1_uaswu")
+
+[node name="Killzone" parent="Top" instance=ExtResource("3_bjd8j")]
+position = Vector2(-1, -198)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top/Killzone"]
+position = Vector2(1, 198)
+shape = SubResource("RectangleShape2D_7v15v")
+
+[node name="CheckPoint" type="Area2D" parent="."]
+collision_mask = 2
+script = ExtResource("4_laa4h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckPoint"]
+position = Vector2(24, -8)
+shape = SubResource("RectangleShape2D_85m2m")
+
+[connection signal="body_exited" from="." to="CheckPoint" method="_on_obstacles_body_exited"]
+[connection signal="body_entered" from="CheckPoint" to="CheckPoint" method="_on_body_entered"]
